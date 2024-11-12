@@ -3,9 +3,8 @@ img {
   height: auto;
 }
 
-header{
-    background-color: #562b81;
-
+header {
+  background-color: #562b81;
 }
 
 .navbar {
@@ -16,9 +15,6 @@ header{
   font-size: 30px;
   font-weight: 400;
   text-align: left;
-  border: 1px solid red;
-
-  /* align-items: center; */
   justify-content: left;
 }
 
@@ -36,12 +32,10 @@ button {
   padding: 0.5rem 1rem;
   font-size: 1rem;
   justify-content: right;
-  border-radius: 10px;radius
-
-
+  border-radius: 10px;
 }
 
-.form-actions{
+.form-actions {
   display: flex;
   justify-content: flex-end;
 }

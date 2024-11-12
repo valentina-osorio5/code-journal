@@ -1,5 +1,11 @@
 interface Entry {
   entryId: number;
+  title: string;
+  photoUrl: string;
+  notes: string;
+}
+
+interface FormElements extends HTMLFormControlsCollection {
   title: HTMLInputElement;
   photoUrl: HTMLInputElement;
   notes: HTMLTextAreaElement;
@@ -16,22 +22,20 @@ function handleInput(event: any): void {
 }
 $imageUrl?.addEventListener('input', handleInput);
 
-const $button = document?.querySelector('.button');
-
-console.log(data.nextEntryID);
-
 function handleSubmit(event: any): void {
   event.preventDefault();
   const $formElements = $entryForm?.elements as FormElements;
-  const obj: Entry = {
-    entryId: data.nextEntryId
+  const newEntry: Entry = {
+    entryId: data.nextEntryId,
     title: $formElements.title.value,
     photoUrl: $formElements.photoUrl.value,
-    notes: $formElements.notes.value};
-    console.log(obj);
-    data.entries.push(obj);
-    $image?.setAttribute('src', 'images/placeholder-image-square.jpg');
-    $entryForm.reset();
-
+    notes: $formElements.notes.value,
+  };
+  data.entries.unshift(newEntry);
+  data.nextEntryId++;
+  writeData();
+  $image?.setAttribute('src', 'images/placeholder-image-square.jpg');
+  $entryForm.reset();
 }
+
 $entryForm?.addEventListener('submit', handleSubmit);
