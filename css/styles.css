@@ -3,23 +3,23 @@ img {
   height: auto;
 }
 
+header{
+    background-color: #562b81;
+
+}
+
 .navbar {
   background-color: #562b81;
-  /* height: 80px; */
   margin: 0 auto;
-  padding: 1.5rem;
   color: white;
   font-family: 'Proza Libre', sans-serif;
   font-size: 30px;
   font-weight: 400;
   text-align: left;
-  text-underline-position: from-font;
-  text-decoration-skip-ink: none;
   border: 1px solid red;
-  line-height: 40.72px;
+
   /* align-items: center; */
   justify-content: left;
-  width: 100%;
 }
 
 input,
