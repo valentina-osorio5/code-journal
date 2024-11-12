@@ -1,20 +1,11 @@
-/* exported data, writeData */
-interface Data {
-  view: 'entries' | 'entry-form';
-  entries: Entry[];
-  editing: null | Entry;
-  nextEntryId: number;
-}
-
+'use strict';
 const dataKey = 'code-journal-data';
-
 const data = readData();
-
-function readData(): Data {
-  let localStorageData: Data;
+function readData() {
+  let localStorageData;
   const localData = localStorage.getItem(dataKey);
   if (localData) {
-    localStorageData = JSON.parse(localData) as Data;
+    localStorageData = JSON.parse(localData);
   } else {
     localStorageData = {
       view: 'entry-form',
@@ -25,8 +16,7 @@ function readData(): Data {
   }
   return localStorageData;
 }
-
-function writeData(): void {
+function writeData() {
   const dataJSON = JSON.stringify(data);
   localStorage.setItem(dataKey, dataJSON);
 }

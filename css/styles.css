@@ -1,0 +1,51 @@
+img {
+  width: 100%;
+  height: auto;
+}
+
+header {
+  background-color: #562b81;
+}
+
+.navbar {
+  background-color: #562b81;
+  margin: 0 auto;
+  color: white;
+  font-family: 'Proza Libre', sans-serif;
+  font-size: 30px;
+  font-weight: 400;
+  text-align: left;
+  justify-content: left;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 7px;
+  box-shadow: none;
+}
+
+button {
+  background-color: #562b81;
+  color: white;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  justify-content: right;
+  border-radius: 10px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.form-title {
+  font-family: 'Proza Libre', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 40.72px;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+}
