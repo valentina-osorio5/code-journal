@@ -1,4 +1,5 @@
-interface FormElements extends HTMLFormControlsCollection {
+interface Entry {
+  entryId: number;
   title: HTMLInputElement;
   photoUrl: HTMLInputElement;
   notes: HTMLTextAreaElement;
@@ -17,15 +18,20 @@ $imageUrl?.addEventListener('input', handleInput);
 
 const $button = document?.querySelector('.button');
 
+console.log(data.nextEntryID);
+
 function handleSubmit(event: any): void {
   event.preventDefault();
-  console.log('button was pressed');
   const $formElements = $entryForm?.elements as FormElements;
-  const obj = {
+  const obj: Entry = {
+    entryId: data.nextEntryId
     title: $formElements.title.value,
     photoUrl: $formElements.photoUrl.value,
-    notes: $formElements.notes.value,
-  };
-  console.log(obj);
+    notes: $formElements.notes.value};
+    console.log(obj);
+    data.entries.push(obj);
+    $image?.setAttribute('src', 'images/placeholder-image-square.jpg');
+    $entryForm.reset();
+
 }
 $entryForm?.addEventListener('submit', handleSubmit);
