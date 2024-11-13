@@ -64,13 +64,13 @@ function renderEntry(entry: Entry): any {
 
 // console.log(renderEntry(testEntries));
 
-const testEntries = {
-  entryId: 1,
-  title: 'test',
-  photoUrl:
-    'https://plus.unsplash.com/premium_photo-1664382466516-756b1e0721f4?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyfHx8ZW58MHx8fHx8',
-  notes: 'test',
-};
+// const testEntries = {
+//   entryId: 1,
+//   title: 'test',
+//   photoUrl:
+//     'https://plus.unsplash.com/premium_photo-1664382466516-756b1e0721f4?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyfHx8ZW58MHx8fHx8',
+//   notes: 'test',
+// };
 
 window.addEventListener('DOMContentLoaded', handleDCL);
 
@@ -83,21 +83,6 @@ function handleDCL(): void {
     // console.log('I added to the UL element');
   }
 }
-
-// function toggleNoEntries(): void {
-//   if (!$holdsNoEntries || $dataViewDiv !$) throw new Error('$dataViewDiv or $holdsNoEntries query failed');
-//     return;
-//   }
-//   if (data.entries.length === 0) {
-//     console.log('showing no entries');
-//     $holdsNoEntries.className = 'column-full holds-no-entries';
-//     $dataViewDiv.className = 'dataviewentries hidden';
-//   } else {
-//     console.log('hiding no entries div, showing entries');
-//     $dataViewDiv.className = 'dataviewentries';
-//     $holdsNoEntries.className = 'column-full holds-no-entries hidden';
-//   }
-// }
 
 function toggleNoEntries(): void {
   if (data.entries.length === 0) {
@@ -119,4 +104,21 @@ function toggleNoEntries(): void {
   }
 }
 
-toggleNoEntries();
+// toggleNoEntries();
+
+function viewSwap(viewName: 'entries' | 'entry-form'): void {
+  const entriesView = document.getElementById('entries');
+  const entryFormView = document.getElementById('entry-form');
+
+  // Hide or show the appropriate view based on viewName
+  if (viewName === 'entries') {
+    entriesView?.classList.remove('hidden');
+    entryFormView?.classList.add('hidden');
+  } else if (viewName === 'entry-form') {
+    entryFormView?.classList.remove('hidden');
+    entriesView?.classList.add('hidden');
+  }
+
+  // Update the view in the data model
+  data.view = viewName;
+}
