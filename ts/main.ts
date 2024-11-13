@@ -67,33 +67,25 @@ function renderEntry(entry: Entry): any {
   return listItem;
 }
 
-// this will probably be deleted
-// const $dataViewDiv = document?.querySelector('.dataviewentries');
-// for (let i = 0; i < entry.length; i++) {
-//   const newHTML = renderEntry(entry[i]);
-//   $dataViewDiv.append(newHTML);
-// }
-
 console.log(renderEntry(testEntries));
 
-addEventListener("DOMContentLoaded", handleDCL)
+addEventListener('DOMContentLoaded', handleDCL(data.entries));
 
 const $dataViewDiv = document?.querySelector('.dataviewentries');
 
-function handleDCL(data.entries:[]):any{
-for (let i = 0; i < entry.length; i++) {
-  const newHTML = renderEntry(data.entries[i]);
-  if (newHTML){
-  const uElement = document?.querySelector('UL');
-  if (uElement){
-    uElement.appendChild(listItem);
-    $dataViewDiv?.appendChild(uElement);
-} if else {
-const newUL = document.createElement('ul');
-} newUL.appendChild(listItem);
-    $dataViewDiv?.appendChild(newUL);
-}else {
-  return "No entries have been recorded."
-}
-}
+function handleDCL(entries: Entry[]): void {
+  let uList = document?.querySelector('ul');
+  if (!uList) {
+    uList = document.createElement('ul');
+    console.log('creating a ul element');
+  }
+  for (let i = 0; i < entries.length; i++) {
+    const listItem = renderEntry(entries[i]);
+    uList?.appendChild(listItem);
+    console.log('I added to the UL element');
+  }
+  if ($dataViewDiv && !document.contains(uList)) {
+    $dataViewDiv.appendChild(uList);
+    console.log('I added the ul to the dataview div');
+  }
 }

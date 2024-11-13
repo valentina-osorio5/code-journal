@@ -7,6 +7,15 @@ header {
   background-color: #562b81;
 }
 
+.no-entries {
+  font-family: 'Open Sans';
+  font-size: 26px;
+  width: 100%;
+  justify-content: center;
+
+  /* align-items: center; */
+}
+
 .navbar {
   background-color: #562b81;
   margin: 0 auto;
@@ -61,14 +70,39 @@ li {
   margin-bottom: 20px;
 }
 
-h2,
-p {
-  display: flex;
-  padding-left: 15px;
-  width: 200px;
-}
-
 ul {
   display: flex;
   flex-wrap: wrap;
+}
+
+h2,
+p {
+  display: flex;
+  width: 200px;
+  padding-top: 10px;
+}
+
+h2 {
+  font-size: 24px;
+}
+
+p {
+  font-size: 18px;
+}
+
+@media screen and (width >= 768px) {
+  h2,
+  p {
+    display: flex;
+    padding-left: 15px;
+    width: 200px;
+  }
+
+  h2 {
+    font-size: 30px;
+  }
+
+  p {
+    font-size: 20px;
+  }
 }
