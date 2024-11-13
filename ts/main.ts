@@ -54,23 +54,46 @@ function renderEntry(entry: Entry): any {
 
   const img = document.createElement('img');
   img.setAttribute('src', entry.photoUrl);
-  listItem.append(img);
+  listItem.appendChild(img);
 
   const title = document.createElement('h2');
   title.textContent = entry.title;
-  listItem.append(title);
+  listItem.appendChild(title);
 
   const description = document.createElement('p');
   description.textContent = entry.notes;
-  listItem.append(description);
+  listItem.appendChild(description);
 
   return listItem;
 }
 
-const $dataViewDiv = document?.querySelector('.dataviewentries');
-for (let i = 0; i < entry.length; i++) {
-  const newHTML = renderEntry(entry[i]);
-  $dataViewDiv.append(newHTML);
-}
+// this will probably be deleted
+// const $dataViewDiv = document?.querySelector('.dataviewentries');
+// for (let i = 0; i < entry.length; i++) {
+//   const newHTML = renderEntry(entry[i]);
+//   $dataViewDiv.append(newHTML);
+// }
 
 console.log(renderEntry(testEntries));
+
+addEventListener("DOMContentLoaded", handleDCL)
+
+const $dataViewDiv = document?.querySelector('.dataviewentries');
+
+function handleDCL(data.entries:[]):any{
+for (let i = 0; i < entry.length; i++) {
+  const newHTML = renderEntry(data.entries[i]);
+  if (newHTML){
+  const uElement = document?.querySelector('UL');
+  if (uElement){
+    uElement.appendChild(listItem);
+    $dataViewDiv?.appendChild(uElement);
+} if else {
+const newUL = document.createElement('ul');
+} newUL.appendChild(listItem);
+    $dataViewDiv?.appendChild(newUL);
+}else {
+  return "No entries have been recorded."
+}
+}
+}
