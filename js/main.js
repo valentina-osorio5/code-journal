@@ -44,3 +44,9 @@ function renderEntry(entry) {
     listItem.append(description);
     return listItem;
 }
+const $dataViewDiv = document?.querySelector('.dataviewentries');
+for (let i = 0; i < entry.length; i++) {
+    const newHTML = renderEntry(entry[i]);
+    $dataViewDiv.append(newHTML);
+}
+console.log(renderEntry(testEntries));
