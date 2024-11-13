@@ -39,3 +39,30 @@ function handleSubmit(event: any): void {
 }
 
 $entryForm?.addEventListener('submit', handleSubmit);
+
+const testEntries = {
+  entryId: 1,
+  title: 'test',
+  photoUrl:
+    'https://plus.unsplash.com/premium_photo-1664382466516-756b1e0721f4?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyfHx8ZW58MHx8fHx8',
+  notes: 'test',
+};
+
+function renderEntry(entry: Entry): any {
+  const listItem = document.createElement('li');
+  listItem.className = 'list-item';
+
+  const img = document.createElement('img');
+  img.setAttribute('src', entry.photoUrl);
+  listItem.append(img);
+
+  const title = document.createElement('h2');
+  title.textContent = entry.title;
+  listItem.append(title);
+
+  const description = document.createElement('p');
+  description.textContent = entry.notes;
+  listItem.append(description);
+
+  return listItem;
+}

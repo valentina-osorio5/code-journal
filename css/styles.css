@@ -49,3 +49,26 @@ button {
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
 }
+
+.list-item img {
+  float: left;
+  flex-basis: 50%;
+  width: 50%;
+}
+
+li {
+  list-style: none;
+  margin-bottom: 20px;
+}
+
+h2,
+p {
+  display: flex;
+  padding-left: 15px;
+  width: 200px;
+}
+
+ul {
+  display: flex;
+  flex-wrap: wrap;
+}
