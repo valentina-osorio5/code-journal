@@ -14,6 +14,9 @@ interface FormElements extends HTMLFormControlsCollection {
 const $image = document?.querySelector('#entry-image');
 const $imageUrl = document?.querySelector('#photo-url');
 const $entryForm = document?.querySelector('#entry-form') as HTMLFormElement;
+const $uList = document?.querySelector('ul');
+const $dataViewDiv = document?.querySelector('.dataviewentries');
+const $holdsNoEntries = document?.querySelector('.holds-no-entries');
 
 function handleInput(event: any): void {
   const eventTarget = event.target as HTMLInputElement;
@@ -40,14 +43,6 @@ function handleSubmit(event: any): void {
 
 $entryForm?.addEventListener('submit', handleSubmit);
 
-const testEntries = {
-  entryId: 1,
-  title: 'test',
-  photoUrl:
-    'https://plus.unsplash.com/premium_photo-1664382466516-756b1e0721f4?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyfHx8ZW58MHx8fHx8',
-  notes: 'test',
-};
-
 function renderEntry(entry: Entry): any {
   const listItem = document.createElement('li');
   listItem.className = 'list-item';
@@ -67,25 +62,61 @@ function renderEntry(entry: Entry): any {
   return listItem;
 }
 
-console.log(renderEntry(testEntries));
+// console.log(renderEntry(testEntries));
 
-addEventListener('DOMContentLoaded', handleDCL(data.entries));
+const testEntries = {
+  entryId: 1,
+  title: 'test',
+  photoUrl:
+    'https://plus.unsplash.com/premium_photo-1664382466516-756b1e0721f4?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyfHx8ZW58MHx8fHx8',
+  notes: 'test',
+};
 
-const $dataViewDiv = document?.querySelector('.dataviewentries');
+window.addEventListener('DOMContentLoaded', handleDCL);
 
-function handleDCL(entries: Entry[]): void {
-  let uList = document?.querySelector('ul');
-  if (!uList) {
-    uList = document.createElement('ul');
-    console.log('creating a ul element');
-  }
-  for (let i = 0; i < entries.length; i++) {
-    const listItem = renderEntry(entries[i]);
-    uList?.appendChild(listItem);
-    console.log('I added to the UL element');
-  }
-  if ($dataViewDiv && !document.contains(uList)) {
-    $dataViewDiv.appendChild(uList);
-    console.log('I added the ul to the dataview div');
+function handleDCL(): void {
+  // console.log('handleDCLfired');
+  for (let i = 0; i < data.entries.length; i++) {
+    // console.log('looping through entries');
+    const listItem = renderEntry(data.entries[i]);
+    $uList?.appendChild(listItem);
+    // console.log('I added to the UL element');
   }
 }
+
+// function toggleNoEntries(): void {
+//   if (!$holdsNoEntries || $dataViewDiv !$) throw new Error('$dataViewDiv or $holdsNoEntries query failed');
+//     return;
+//   }
+//   if (data.entries.length === 0) {
+//     console.log('showing no entries');
+//     $holdsNoEntries.className = 'column-full holds-no-entries';
+//     $dataViewDiv.className = 'dataviewentries hidden';
+//   } else {
+//     console.log('hiding no entries div, showing entries');
+//     $dataViewDiv.className = 'dataviewentries';
+//     $holdsNoEntries.className = 'column-full holds-no-entries hidden';
+//   }
+// }
+
+function toggleNoEntries(): void {
+  if (data.entries.length === 0) {
+    console.log('showing no entries');
+    if ($holdsNoEntries) {
+      $holdsNoEntries.className = 'column-full holds-no-entries';
+    }
+    if ($dataViewDiv) {
+      $dataViewDiv.className = 'dataviewentries hidden';
+    }
+  } else {
+    console.log('hiding no entries div, showing entries');
+    if ($dataViewDiv) {
+      $dataViewDiv.className = 'dataviewentries';
+    }
+    if ($holdsNoEntries) {
+      $holdsNoEntries.className = 'column-full holds-no-entries hidden';
+    }
+  }
+}
+
+toggleNoEntries();
