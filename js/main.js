@@ -2,9 +2,11 @@
 const $image = document?.querySelector('#entry-image');
 const $imageUrl = document?.querySelector('#photo-url');
 const $entryForm = document?.querySelector('#entry-form');
+const $entryFormView = document?.querySelector('#entry-form-view');
 const $uList = document?.querySelector('ul');
 const $dataViewDiv = document?.querySelector('.dataviewentries');
 const $holdsNoEntries = document?.querySelector('.holds-no-entries');
+const $navBarButton = document?.querySelector('.navbarbtn');
 function handleInput(event) {
     const eventTarget = event.target;
     const newSrc = eventTarget.value;
@@ -13,7 +15,9 @@ function handleInput(event) {
 $imageUrl?.addEventListener('input', handleInput);
 function handleSubmit(event) {
     event.preventDefault();
+    console.log($entryForm);
     const $formElements = $entryForm?.elements;
+    console.log($formElements);
     const newEntry = {
         entryId: data.nextEntryId,
         title: $formElements.title.value,
@@ -21,10 +25,14 @@ function handleSubmit(event) {
         notes: $formElements.notes.value,
     };
     data.entries.unshift(newEntry);
+    $uList?.prepend(renderEntry(newEntry));
     data.nextEntryId++;
     writeData();
+    // handleDCL();
     $image?.setAttribute('src', 'images/placeholder-image-square.jpg');
     $entryForm.reset();
+    viewSwap('entries');
+    toggleNoEntries();
 }
 $entryForm?.addEventListener('submit', handleSubmit);
 function renderEntry(entry) {
@@ -80,18 +88,24 @@ function toggleNoEntries() {
     }
 }
 // toggleNoEntries();
-function viewSwap(viewName) {
-    const entriesView = document.getElementById('entries');
-    const entryFormView = document.getElementById('entry-form');
-    // Hide or show the appropriate view based on viewName
-    if (viewName === 'entries') {
-        entriesView?.classList.remove('hidden');
-        entryFormView?.classList.add('hidden');
-    }
-    else if (viewName === 'entry-form') {
-        entryFormView?.classList.remove('hidden');
-        entriesView?.classList.add('hidden');
-    }
-    // Update the view in the data model
-    data.view = viewName;
+// function viewSwap(viewName: 'entries' | 'entry-form'): void {
+//   console.log('view swap fired');
+//   console.log(viewName);
+//   const entriesView = document.getElementById('entries');
+//   const entryFormView = document.getElementById('entry-form-view');
+//   //   // Hide or show the appropriate view based on viewName
+//   if (viewName === 'entries') {
+//     entriesView?.classList.remove('hidden');
+//     entryFormView?.classList.add('hidden');
+//   } else if (viewName === 'entry-form') {
+//     entryFormView?.classList.remove('hidden');
+//     entriesView?.classList.add('hidden');
+//   }
+//     // Update the view in the data model
+//     data.view = viewName;
+//     toggleNoEntries();
+// }
+function handleViewEntriesClick() {
+    viewSwap('entries');
 }
+$navBarButton?.addEventListener('click', handleViewEntriesClick);

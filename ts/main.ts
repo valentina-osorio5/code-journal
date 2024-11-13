@@ -14,9 +14,11 @@ interface FormElements extends HTMLFormControlsCollection {
 const $image = document?.querySelector('#entry-image');
 const $imageUrl = document?.querySelector('#photo-url');
 const $entryForm = document?.querySelector('#entry-form') as HTMLFormElement;
+const $entryFormView = document?.querySelector('#entry-form-view');
 const $uList = document?.querySelector('ul');
 const $dataViewDiv = document?.querySelector('.dataviewentries');
 const $holdsNoEntries = document?.querySelector('.holds-no-entries');
+const $navBarButton = document?.querySelector('.navbarbtn');
 
 function handleInput(event: any): void {
   const eventTarget = event.target as HTMLInputElement;
@@ -27,7 +29,9 @@ $imageUrl?.addEventListener('input', handleInput);
 
 function handleSubmit(event: any): void {
   event.preventDefault();
+  console.log($entryForm);
   const $formElements = $entryForm?.elements as FormElements;
+  console.log($formElements);
   const newEntry: Entry = {
     entryId: data.nextEntryId,
     title: $formElements.title.value,
@@ -35,10 +39,14 @@ function handleSubmit(event: any): void {
     notes: $formElements.notes.value,
   };
   data.entries.unshift(newEntry);
+  $uList?.prepend(renderEntry(newEntry));
   data.nextEntryId++;
   writeData();
+  // handleDCL();
   $image?.setAttribute('src', 'images/placeholder-image-square.jpg');
   $entryForm.reset();
+  viewSwap('entries');
+  toggleNoEntries();
 }
 
 $entryForm?.addEventListener('submit', handleSubmit);
@@ -106,19 +114,27 @@ function toggleNoEntries(): void {
 
 // toggleNoEntries();
 
-function viewSwap(viewName: 'entries' | 'entry-form'): void {
-  const entriesView = document.getElementById('entries');
-  const entryFormView = document.getElementById('entry-form');
+// function viewSwap(viewName: 'entries' | 'entry-form'): void {
+//   console.log('view swap fired');
+//   console.log(viewName);
+//   const entriesView = document.getElementById('entries');
+//   const entryFormView = document.getElementById('entry-form-view');
+//   //   // Hide or show the appropriate view based on viewName
+//   if (viewName === 'entries') {
+//     entriesView?.classList.remove('hidden');
+//     entryFormView?.classList.add('hidden');
+//   } else if (viewName === 'entry-form') {
+//     entryFormView?.classList.remove('hidden');
+//     entriesView?.classList.add('hidden');
+//   }
 
-  // Hide or show the appropriate view based on viewName
-  if (viewName === 'entries') {
-    entriesView?.classList.remove('hidden');
-    entryFormView?.classList.add('hidden');
-  } else if (viewName === 'entry-form') {
-    entryFormView?.classList.remove('hidden');
-    entriesView?.classList.add('hidden');
-  }
+//     // Update the view in the data model
+//     data.view = viewName;
+//     toggleNoEntries();
+// }
 
-  // Update the view in the data model
-  data.view = viewName;
+function handleViewEntriesClick(): void {
+  viewSwap('entries');
 }
+
+$navBarButton?.addEventListener('click', handleViewEntriesClick);
