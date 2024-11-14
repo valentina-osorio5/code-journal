@@ -5,6 +5,47 @@ img {
 
 header {
   background-color: #562b81;
+  padding: 1.5rem 0;
+  font-family: 'Proza Libre', sans-serif;
+}
+
+.new-entry-header {
+  padding: 1.5rem;
+  font-family: 'Proza Libre', sans-serif;
+}
+
+.newentrybtn {
+  background-color: #562b81;
+  color: white;
+  font-family: 'Open Sans';
+  font-size: 20px;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  margin: 0.5rem;
+  border-radius: 10px;
+  align-items: right;
+  justify-content: right;
+}
+
+.navbarbtn {
+  color: white;
+  font-family: 'Open Sans';
+  font-size: 20px;
+  text-decoration: none;
+  width: 70px;
+  margin-left: 1.5rem;
+  padding: 0.5rem 1rem;
+}
+
+.entries-styling {
+  font-family: 'Proza Libre', sans-serif;
+}
+
+.row.entries-styling {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 0;
 }
 
 .navbar {
@@ -16,6 +57,28 @@ header {
   font-weight: 400;
   text-align: left;
   justify-content: left;
+  display: flex;
+  align-items: center;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+h1 {
+  padding: 0;
+  margin: 0;
+  font-family: 'Proza Libre', sans-serif;
+}
+
+.no-entries {
+  font-family: 'Open Sans';
+  font-size: 26px;
+  width: 100%;
+  justify-content: center;
 }
 
 input,
@@ -48,4 +111,52 @@ button {
   text-align: left;
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
+}
+
+.list-item img {
+  float: left;
+  flex-basis: 50%;
+  width: 50%;
+}
+
+li {
+  list-style: none;
+  margin-bottom: 20px;
+}
+
+ul {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+h2,
+p {
+  display: flex;
+  width: 200px;
+  padding-top: 10px;
+}
+
+h2 {
+  font-size: 24px;
+}
+
+p {
+  font-size: 18px;
+}
+
+@media screen and (width >= 768px) {
+  h2,
+  p {
+    display: flex;
+    padding-left: 15px;
+    width: 200px;
+  }
+
+  h2 {
+    font-size: 30px;
+  }
+
+  p {
+    font-size: 20px;
+  }
 }

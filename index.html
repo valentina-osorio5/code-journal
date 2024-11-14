@@ -20,11 +20,15 @@
       <div class="container">
         <nav class="navbar column-full">
           <h1>Code Journal</h1>
+          <a class="navbarbtn"> Entries</a>
         </nav>
       </div>
     </header>
     <main class="container">
-      <div data-view="entry-form" class="entry-form-wrapper">
+      <div
+        data-view="entry-form"
+        id="entry-form-view"
+        class="entry-form-wrapper hidden">
         <form id="entry-form">
           <div class="column-full">
             <h1 class="new-entry-header">New Entry</h1>
@@ -52,7 +56,16 @@
           </div>
         </form>
       </div>
-      <div data-view="entries" class="hidden"></div>
+      <div class="row entries-styling">
+        <h1 class="new-entry-header">Entries</h1>
+        <a class="newentrybtn"> NEW </a>
+      </div>
+      <div data-view="entries" id="entries" class="dataviewentries">
+        <div class="column-full holds-no-entries">
+          <p class="no-entries">No entries have been recorded.</p>
+        </div>
+        <ul></ul>
+      </div>
     </main>
     <script src="js/data.js"></script>
     <script src="js/main.js"></script>
