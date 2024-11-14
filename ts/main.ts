@@ -21,7 +21,7 @@ const $holdsNoEntries = document?.querySelector('.holds-no-entries');
 const $navBarButton = document?.querySelector('.navbarbtn');
 const $newEntryButton = document?.querySelector('.newentrybtn');
 const $newEntries = document?.querySelector('.entries-styling');
-const $pen = document?.querySelector('.fa-pencil');
+const $pen = document?.querySelector('.ul');
 
 function handleInput(event: any): void {
   const eventTarget = event.target as HTMLInputElement;
@@ -126,14 +126,38 @@ function handleNewEntry(): void {
 }
 $newEntryButton?.addEventListener('click', handleNewEntry);
 
-// Find the entry object in the data.entries array whose id matches the
-// data-entry-id attribute value of the clicked entry and assigns that
-// entry’s object to the data.editing property.
 
-// use matches method & perhaps closest method
-
-function handlePenClick(): void {
-  viewSwap(entry - form);
-}
+    // step 6 - after the loop set data.editing = entryEdit
+    // log `data.editing` confirm the object assigned to it is what was clicked.
+    // This is the conclusion of the whole step: Find the entry object in the `data.entries` array whose
+    // id matches the `data-entry-id` attribute value of the clicked entry and assigns that entry's object to
+    // the `data.editing` property. The next task will still be written in this function
 
 $pen?.addEventListener('click', handlePenClick);
+
+
+function handlePenClick(event: Event): void {
+  console.log('handlePenClick is firing');
+  const eventTarget = event.target;
+  console.log(eventTarget);
+  if (eventTarget?.className === 'fa-solid fa-pencil') {
+    console.log('i was clicked');
+    viewSwap('entry-form');
+    const closestElement = eventTarget.closest('[data-entry-id]');
+    const entryId = closestElement.dataset.entryId;
+    console.log(entryId);
+    const entryIdNumber = parseInt(entryId);
+    console.log(entryIdNumber, typeof entryIdNumber);
+    let entryEdit
+    for (let i = 0; i < data.entries.length; i++) {
+      if data.entries[i].entryId === entryIdNumber {
+      let entryEdit = data.entries[i];
+      let data.editing = entryEdit
+      console.log(data.editing);
+      }
+
+
+
+
+  }
+}
