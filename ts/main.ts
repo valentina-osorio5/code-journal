@@ -21,7 +21,6 @@ const $holdsNoEntries = document?.querySelector('.holds-no-entries');
 const $navBarButton = document?.querySelector('.navbarbtn');
 const $newEntryButton = document?.querySelector('.newentrybtn');
 const $newEntries = document?.querySelector('.entries-styling');
-const $liItem = document?.querySelectorAll('li');
 
 function handleInput(event: any): void {
   const eventTarget = event.target as HTMLInputElement;
@@ -32,9 +31,7 @@ $imageUrl?.addEventListener('input', handleInput);
 
 function handleSubmit(event: any): void {
   event.preventDefault();
-  console.log($entryForm);
   const $formElements = $entryForm?.elements as FormElements;
-  console.log($formElements);
   const newEntry: Entry = {
     entryId: data.nextEntryId,
     title: $formElements.title.value,
@@ -85,8 +82,6 @@ function handleDCL(): void {
 const currentView = data.view;
 
 function viewSwap(viewName: 'entries' | 'entry-form'): void {
-  console.log('view swap fired');
-  console.log(viewName);
   const entriesView = document.getElementById('entries');
   const entryFormView = document.getElementById('entry-form-view');
   //   // Hide or show the appropriate view based on viewName
@@ -107,10 +102,8 @@ function viewSwap(viewName: 'entries' | 'entry-form'): void {
 
 function toggleNoEntries(): void {
   if (data.entries.length === 0) {
-    console.log('showing no entries');
     $holdsNoEntries?.classList.remove('hidden');
   } else {
-    console.log('hiding no entries div, showing entries');
     $holdsNoEntries?.classList.add('hidden');
   }
 }

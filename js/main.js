@@ -9,7 +9,6 @@ const $holdsNoEntries = document?.querySelector('.holds-no-entries');
 const $navBarButton = document?.querySelector('.navbarbtn');
 const $newEntryButton = document?.querySelector('.newentrybtn');
 const $newEntries = document?.querySelector('.entries-styling');
-const $liItem = document?.querySelectorAll('li');
 function handleInput(event) {
     const eventTarget = event.target;
     const newSrc = eventTarget.value;
@@ -18,9 +17,7 @@ function handleInput(event) {
 $imageUrl?.addEventListener('input', handleInput);
 function handleSubmit(event) {
     event.preventDefault();
-    console.log($entryForm);
     const $formElements = $entryForm?.elements;
-    console.log($formElements);
     const newEntry = {
         entryId: data.nextEntryId,
         title: $formElements.title.value,
@@ -62,8 +59,6 @@ function handleDCL() {
 }
 const currentView = data.view;
 function viewSwap(viewName) {
-    console.log('view swap fired');
-    console.log(viewName);
     const entriesView = document.getElementById('entries');
     const entryFormView = document.getElementById('entry-form-view');
     //   // Hide or show the appropriate view based on viewName
@@ -83,11 +78,9 @@ function viewSwap(viewName) {
 }
 function toggleNoEntries() {
     if (data.entries.length === 0) {
-        console.log('showing no entries');
         $holdsNoEntries?.classList.remove('hidden');
     }
     else {
-        console.log('hiding no entries div, showing entries');
         $holdsNoEntries?.classList.add('hidden');
     }
 }
