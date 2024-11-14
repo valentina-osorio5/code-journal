@@ -9,6 +9,7 @@ const $holdsNoEntries = document?.querySelector('.holds-no-entries');
 const $navBarButton = document?.querySelector('.navbarbtn');
 const $newEntryButton = document?.querySelector('.newentrybtn');
 const $newEntries = document?.querySelector('.entries-styling');
+const $pen = document?.querySelector('.fa-pencil');
 function handleInput(event) {
     const eventTarget = event.target;
     const newSrc = eventTarget.value;
@@ -37,12 +38,17 @@ $entryForm?.addEventListener('submit', handleSubmit);
 function renderEntry(entry) {
     const listItem = document.createElement('li');
     listItem.className = 'list-item';
+    const entryIdString = String(entry.entryId);
+    listItem.setAttribute('data-entry-id', entryIdString);
     const img = document.createElement('img');
     img.setAttribute('src', entry.photoUrl);
     listItem.appendChild(img);
     const title = document.createElement('h2');
     title.textContent = entry.title;
     listItem.appendChild(title);
+    const pen = document.createElement('i');
+    pen.className = 'fa-solid fa-pencil';
+    listItem.append(pen);
     const description = document.createElement('p');
     description.textContent = entry.notes;
     listItem.appendChild(description);
@@ -92,3 +98,11 @@ function handleNewEntry() {
     viewSwap('entry-form');
 }
 $newEntryButton?.addEventListener('click', handleNewEntry);
+// Find the entry object in the data.entries array whose id matches the
+// data-entry-id attribute value of the clicked entry and assigns that
+// entry’s object to the data.editing property.
+// use matches method & perhaps closest method
+function handlePenClick() {
+    viewSwap(entry - form);
+}
+$pen?.addEventListener('click', handlePenClick);

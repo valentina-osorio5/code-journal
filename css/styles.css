@@ -14,6 +14,25 @@ header {
   font-family: 'Proza Libre', sans-serif;
 }
 
+.fa-solid.fa-pencil {
+  color: #562b81;
+}
+
+.list-item h2 {
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+}
+
+.fa-solid.fa-pencil {
+  color: #562b81;
+  font-size: 25px;
+  vertical-align: middle;
+  align-items: right;
+  justify-content: right;
+  padding-right: 50px;
+}
+
 .newentrybtn {
   background-color: #562b81;
   color: white;
