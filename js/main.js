@@ -10,6 +10,7 @@ const $navBarButton = document?.querySelector('.navbarbtn');
 const $newEntryButton = document?.querySelector('.newentrybtn');
 const $newEntries = document?.querySelector('.entries-styling');
 const $pen = document?.querySelector('.ul');
+const $editViewTitle = document?.querySelector('.new-entry-header');
 function handleInput(event) {
     const eventTarget = event.target;
     const newSrc = eventTarget.value;
@@ -104,6 +105,8 @@ $newEntryButton?.addEventListener('click', handleNewEntry);
 // id matches the `data-entry-id` attribute value of the clicked entry and assigns that entry's object to
 // the `data.editing` property. The next task will still be written in this function
 $pen?.addEventListener('click', handlePenClick);
+if (!$editViewTitle)
+    throw new Error('$editViewTitle does not exist');
 function handlePenClick(event) {
     console.log('handlePenClick is firing');
     const eventTarget = event.target;
@@ -116,14 +119,23 @@ function handlePenClick(event) {
         console.log(entryId);
         const entryIdNumber = parseInt(entryId);
         console.log(entryIdNumber, typeof entryIdNumber);
-        // let entryEdit;
+        let entryEdit;
         for (let i = 0; i < data.entries.length; i++) {
             if (data.entries[i].entryId === entryIdNumber) {
-                const entryEdit = data.entries[i];
+                entryEdit = data.entries[i];
                 console.log(entryEdit);
             }
         }
         data.editing = entryEdit;
         console.log('data.editing', data.editing);
+    }
+    if (data.editing) {
+        const $formElements = $entryForm.elements;
+        console.log('$formElements', $formElements);
+        $formElements.title.value = data.editing.title;
+        $formElements.photoUrl.value = data.editing.photoUrl;
+        $formElements.notes.value = data.editing.notes;
+        $image?.setAttribute('src', data.editing.photoUrl);
+        $editViewTitle.textContent = 'Edit Entry';
     }
 }
