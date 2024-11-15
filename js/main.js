@@ -116,13 +116,14 @@ function handlePenClick(event) {
         console.log(entryId);
         const entryIdNumber = parseInt(entryId);
         console.log(entryIdNumber, typeof entryIdNumber);
-        let entryEdit;
+        // let entryEdit;
         for (let i = 0; i < data.entries.length; i++) {
             if (data.entries[i].entryId === entryIdNumber) {
-                let entryEdit = data.entries[i];
-                let data, editing = entryEdit;
-                console.log(data.editing);
+                const entryEdit = data.entries[i];
+                console.log(entryEdit);
             }
         }
+        data.editing = entryEdit;
+        console.log('data.editing', data.editing);
     }
 }

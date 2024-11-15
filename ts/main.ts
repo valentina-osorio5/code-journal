@@ -126,15 +126,13 @@ function handleNewEntry(): void {
 }
 $newEntryButton?.addEventListener('click', handleNewEntry);
 
-
-    // step 6 - after the loop set data.editing = entryEdit
-    // log `data.editing` confirm the object assigned to it is what was clicked.
-    // This is the conclusion of the whole step: Find the entry object in the `data.entries` array whose
-    // id matches the `data-entry-id` attribute value of the clicked entry and assigns that entry's object to
-    // the `data.editing` property. The next task will still be written in this function
+// step 6 - after the loop set data.editing = entryEdit
+// log `data.editing` confirm the object assigned to it is what was clicked.
+// This is the conclusion of the whole step: Find the entry object in the `data.entries` array whose
+// id matches the `data-entry-id` attribute value of the clicked entry and assigns that entry's object to
+// the `data.editing` property. The next task will still be written in this function
 
 $pen?.addEventListener('click', handlePenClick);
-
 
 function handlePenClick(event: Event): void {
   console.log('handlePenClick is firing');
@@ -148,16 +146,14 @@ function handlePenClick(event: Event): void {
     console.log(entryId);
     const entryIdNumber = parseInt(entryId);
     console.log(entryIdNumber, typeof entryIdNumber);
-    let entryEdit
+    // let entryEdit;
     for (let i = 0; i < data.entries.length; i++) {
-      if data.entries[i].entryId === entryIdNumber {
-      let entryEdit = data.entries[i];
-      let data.editing = entryEdit
-      console.log(data.editing);
+      if (data.entries[i].entryId === entryIdNumber) {
+        const entryEdit = data.entries[i];
+        console.log(entryEdit);
       }
-
-
-
-
+    }
+    data.editing = entryEdit;
+    console.log('data.editing', data.editing);
   }
 }
