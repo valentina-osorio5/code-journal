@@ -33,21 +33,51 @@ $imageUrl?.addEventListener('input', handleInput);
 
 function handleSubmit(event: any): void {
   event.preventDefault();
-  const $formElements = $entryForm?.elements as FormElements;
-  const newEntry: Entry = {
-    entryId: data.nextEntryId,
-    title: $formElements.title.value,
-    photoUrl: $formElements.photoUrl.value,
-    notes: $formElements.notes.value,
-  };
-  data.entries.unshift(newEntry);
-  $uList?.prepend(renderEntry(newEntry));
-  data.nextEntryId++;
-  writeData();
-  $image?.setAttribute('src', 'images/placeholder-image-square.jpg');
-  $entryForm.reset();
-  viewSwap('entries');
-  toggleNoEntries();
+  if (data.editing === null) {
+    console.log('data.editing is null');
+    const $formElements = $entryForm?.elements as FormElements;
+    // console.log('$entryForm?.elements', $entryForm?.elements);
+    const newEntry: Entry = {
+      entryId: data.nextEntryId,
+      title: $formElements.title.value,
+      photoUrl: $formElements.photoUrl.value,
+      notes: $formElements.notes.value,
+    };
+    console.log(newEntry);
+    data.entries.unshift(newEntry);
+    $uList?.prepend(renderEntry(newEntry));
+    data.nextEntryId++;
+    writeData();
+    $image?.setAttribute('src', 'images/placeholder-image-square.jpg');
+    $entryForm.reset();
+    viewSwap('entries');
+    toggleNoEntries();
+  } else {
+    console.log('data.editing is not null');
+    console.log('data.editing', data.editing);
+    console.log('data.editing.entryId', data.editing.entryId);
+    const $formElements = $entryForm?.elements as FormElements;
+    const editEntry: Entry = {
+      entryId: data.editing.entryId,
+      title: data.editing.title,
+      photoUrl: data.editing.photoUrl,
+      notes: data.editing.notes,
+    };
+    console.log('editEntry', editEntry);
+    // we have to use splice, and replace this part of above data.entries.unshift(newEntry);
+    // console.log(`we are editing` editEntry.entryId `at editEntry. )
+    for (let i = 0; i < data.entries.length; i++) {
+      const matchingEntryId = data.editing.entryId;
+      console.log(matchingEntryId);
+      if (matchingEntryId === data.entries.entryId) {
+      }
+    }
+    $uList?.prepend(renderEntry(editEntry));
+    data.nextEntryId++;
+    writeData();
+    $editViewTitle.textContent = 'New Entry';
+    data.editing = null;
+  }
 }
 
 $entryForm?.addEventListener('submit', handleSubmit);
@@ -160,7 +190,6 @@ function handlePenClick(event: Event): void {
   }
   if (data.editing) {
     const $formElements = $entryForm.elements as FormElements;
-    console.log('$formElements', $formElements);
     $formElements.title.value = data.editing.title;
     $formElements.photoUrl.value = data.editing.photoUrl;
     $formElements.notes.value = data.editing.notes;
