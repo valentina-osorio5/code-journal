@@ -24,7 +24,7 @@ const $newEntries = document?.querySelector('.entries-styling');
 const $pen = document?.querySelector('.ul');
 const $editViewTitle = document?.querySelector('.new-entry-header');
 
-function handleInput(event: any): void {
+function handleInput(event: any): any {
   const eventTarget = event.target as HTMLInputElement;
   const newSrc = eventTarget.value;
   $image?.setAttribute('src', newSrc);
@@ -56,30 +56,41 @@ function handleSubmit(event: any): void {
     console.log('data.editing is not null');
     console.log('data.editing', data.editing);
     console.log('data.editing.entryId', data.editing.entryId);
+    const $formElements = $entryForm?.elements as FormElements;
     const editEntry: Entry = {
-      entryId: data.editing.entryId,
-      title: data.editing.title,
-      photoUrl: data.editing.photoUrl,
-      notes: data.editing.notes,
+      entryId: data.editing,
+      title: $formElements.title.value,
+      photoUrl: $formElements.photoUrl.value,
+      notes: $formElements.notes.value,
     };
-    console.log('editEntry', editEntry);
-// loop over data.entries
-// check if editEntry.entryId is equal to data.entries[i].entryId to find the match
-// console.log a string that confirms that there is a match found
-// set data.entries[i] to the editEntry
-// after the for loop is complete you can look at data.entries in the console to see
-// that the entry has been updated
+    console.log('editEntry.entryId', editEntry.entryId);
+    // loop over data.entries
+    // after the for loop is complete you can look at data.entries in the console to see
+    // that the entry has been updated
 
     // we have to use splice, and replace this part of above data.entries.unshift(newEntry);
     // console.log(`we are editing` editEntry.entryId `at editEntry. )
     for (let i = 0; i < data.entries.length; i++) {
-      if (editEntry.entryID === data.entries[i]){
-      console.log('match found');
-      data.entries[i] = editEntry
+      const entryIdNumber = editEntry.entryId;
+      if (entryIdNumber === data.entries[i].entryId) {
+        console.log('match found');
+        const deleteEntry = data.entries[i];
+        deleteEntry.replaceWith(editEntry);
+        const $replaceElement = document.querySelector(
+          '[data-entry-id="' + entryIdNumber + '"]',
+        );
+        console.log('replaceElement:', $replaceElement);
+        // const $newElement = editEntry;
+        $replaceElement?.replaceWith(editEntry);
+        data.entries[i] = editEntry;
+        // console.log(data);
+        writeData();
+        viewSwap('entries');
       }
     }
     // $uList?.prepend(renderEntry(editEntry));
-    writeData();
+    // writeData();
+    if (!$editViewTitle) throw new Error('$editViewTitle does not exist');
     $editViewTitle.textContent = 'New Entry';
     data.editing = null;
   }
@@ -87,7 +98,7 @@ function handleSubmit(event: any): void {
 
 $entryForm?.addEventListener('submit', handleSubmit);
 
-function renderEntry(entry: Entry): any {
+function renderEntry(entry: Entry): HTMLLIElement {
   const listItem = document.createElement('li');
   listItem.className = 'list-item';
   const entryIdString = String(entry.entryId);
@@ -162,23 +173,23 @@ function handleNewEntry(): void {
 }
 $newEntryButton?.addEventListener('click', handleNewEntry);
 
-
 $pen?.addEventListener('click', handlePenClick);
-if (!$editViewTitle) throw new Error('$editViewTitle does not exist');
 
 function handlePenClick(event: Event): void {
   console.log('handlePenClick is firing');
-  const eventTarget = event.target;
+  const eventTarget = event.target as HTMLUListElement;
   console.log(eventTarget);
   if (eventTarget?.className === 'fa-solid fa-pencil') {
     console.log('i was clicked');
     viewSwap('entry-form');
-    const closestElement = eventTarget.closest('[data-entry-id]');
-    const entryId = closestElement.dataset.entryId;
+    const $closestElement = eventTarget.closest(
+      '[data-entry-id]',
+    ) as HTMLElement;
+    const entryId = $closestElement!.dataset.entryId;
     console.log(entryId);
-    const entryIdNumber = parseInt(entryId);
+    const entryIdNumber = Number(entryId);
     console.log(entryIdNumber, typeof entryIdNumber);
-    let entryEdit;
+    let entryEdit = null;
     for (let i = 0; i < data.entries.length; i++) {
       if (data.entries[i].entryId === entryIdNumber) {
         entryEdit = data.entries[i];
@@ -194,6 +205,7 @@ function handlePenClick(event: Event): void {
     $formElements.photoUrl.value = data.editing.photoUrl;
     $formElements.notes.value = data.editing.notes;
     $image?.setAttribute('src', data.editing.photoUrl);
+    if (!$editViewTitle) throw new Error('$editViewTitle does not exist');
     $editViewTitle.textContent = 'Edit Entry';
   }
 }
