@@ -56,7 +56,6 @@ function handleSubmit(event: any): void {
     console.log('data.editing is not null');
     console.log('data.editing', data.editing);
     console.log('data.editing.entryId', data.editing.entryId);
-    const $formElements = $entryForm?.elements as FormElements;
     const editEntry: Entry = {
       entryId: data.editing.entryId,
       title: data.editing.title,
@@ -64,16 +63,22 @@ function handleSubmit(event: any): void {
       notes: data.editing.notes,
     };
     console.log('editEntry', editEntry);
+// loop over data.entries
+// check if editEntry.entryId is equal to data.entries[i].entryId to find the match
+// console.log a string that confirms that there is a match found
+// set data.entries[i] to the editEntry
+// after the for loop is complete you can look at data.entries in the console to see
+// that the entry has been updated
+
     // we have to use splice, and replace this part of above data.entries.unshift(newEntry);
     // console.log(`we are editing` editEntry.entryId `at editEntry. )
     for (let i = 0; i < data.entries.length; i++) {
-      const matchingEntryId = data.editing.entryId;
-      console.log(matchingEntryId);
-      if (matchingEntryId === data.entries.entryId) {
+      if (editEntry.entryID === data.entries[i]){
+      console.log('match found');
+      data.entries[i] = editEntry
       }
     }
-    $uList?.prepend(renderEntry(editEntry));
-    data.nextEntryId++;
+    // $uList?.prepend(renderEntry(editEntry));
     writeData();
     $editViewTitle.textContent = 'New Entry';
     data.editing = null;
@@ -157,11 +162,6 @@ function handleNewEntry(): void {
 }
 $newEntryButton?.addEventListener('click', handleNewEntry);
 
-// step 6 - after the loop set data.editing = entryEdit
-// log `data.editing` confirm the object assigned to it is what was clicked.
-// This is the conclusion of the whole step: Find the entry object in the `data.entries` array whose
-// id matches the `data-entry-id` attribute value of the clicked entry and assigns that entry's object to
-// the `data.editing` property. The next task will still be written in this function
 
 $pen?.addEventListener('click', handlePenClick);
 if (!$editViewTitle) throw new Error('$editViewTitle does not exist');
