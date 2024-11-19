@@ -20,60 +20,42 @@ $imageUrl?.addEventListener('input', handleInput);
 function handleSubmit(event) {
     event.preventDefault();
     if (data.editing === null) {
-        console.log('data.editing is null');
         const $formElements = $entryForm?.elements;
-        // console.log('$entryForm?.elements', $entryForm?.elements);
         const newEntry = {
             entryId: data.nextEntryId,
             title: $formElements.title.value,
             photoUrl: $formElements.photoUrl.value,
             notes: $formElements.notes.value,
         };
-        console.log(newEntry);
         data.entries.unshift(newEntry);
         $uList?.prepend(renderEntry(newEntry));
         data.nextEntryId++;
         writeData();
-        $image?.setAttribute('src', 'images/placeholder-image-square.jpg');
+        $image?.setAttribute('src', './images/placeholder-image-square.jpg');
         $entryForm.reset();
         viewSwap('entries');
         toggleNoEntries();
     }
     else {
-        console.log('data.editing is not null');
-        console.log('data.editing', data.editing);
-        console.log('data.editing.entryId', data.editing.entryId);
         const $formElements = $entryForm?.elements;
         const editEntry = {
-            entryId: data.editing,
+            entryId: data.editing.entryId,
             title: $formElements.title.value,
             photoUrl: $formElements.photoUrl.value,
             notes: $formElements.notes.value,
         };
-        console.log('editEntry.entryId', editEntry.entryId);
-        // loop over data.entries
-        // after the for loop is complete you can look at data.entries in the console to see
-        // that the entry has been updated
-        // we have to use splice, and replace this part of above data.entries.unshift(newEntry);
-        // console.log(`we are editing` editEntry.entryId `at editEntry. )
         for (let i = 0; i < data.entries.length; i++) {
             const entryIdNumber = editEntry.entryId;
             if (entryIdNumber === data.entries[i].entryId) {
-                console.log('match found');
-                const deleteEntry = data.entries[i];
-                deleteEntry.replaceWith(editEntry);
-                const $replaceElement = document.querySelector('[data-entry-id="' + entryIdNumber + '"]');
-                console.log('replaceElement:', $replaceElement);
+                // const deleteEntry = data.entries[i];
+                const $replaceElement = document.querySelector(`[data-entry-id="${entryIdNumber}"]`);
+                $replaceElement?.replaceWith(renderEntry(editEntry));
                 // const $newElement = editEntry;
-                $replaceElement?.replaceWith(editEntry);
                 data.entries[i] = editEntry;
-                // console.log(data);
                 writeData();
                 viewSwap('entries');
             }
         }
-        // $uList?.prepend(renderEntry(editEntry));
-        // writeData();
         if (!$editViewTitle)
             throw new Error('$editViewTitle does not exist');
         $editViewTitle.textContent = 'New Entry';
@@ -146,26 +128,19 @@ function handleNewEntry() {
 $newEntryButton?.addEventListener('click', handleNewEntry);
 $pen?.addEventListener('click', handlePenClick);
 function handlePenClick(event) {
-    console.log('handlePenClick is firing');
     const eventTarget = event.target;
-    console.log(eventTarget);
     if (eventTarget?.className === 'fa-solid fa-pencil') {
-        console.log('i was clicked');
         viewSwap('entry-form');
         const $closestElement = eventTarget.closest('[data-entry-id]');
         const entryId = $closestElement.dataset.entryId;
-        console.log(entryId);
         const entryIdNumber = Number(entryId);
-        console.log(entryIdNumber, typeof entryIdNumber);
         let entryEdit = null;
         for (let i = 0; i < data.entries.length; i++) {
             if (data.entries[i].entryId === entryIdNumber) {
                 entryEdit = data.entries[i];
-                console.log(entryEdit);
             }
         }
         data.editing = entryEdit;
-        console.log('data.editing', data.editing);
     }
     if (data.editing) {
         const $formElements = $entryForm.elements;
