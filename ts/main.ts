@@ -23,6 +23,7 @@ const $newEntryButton = document?.querySelector('.newentrybtn');
 const $newEntries = document?.querySelector('.entries-styling');
 const $pen = document?.querySelector('.ul');
 const $editViewTitle = document?.querySelector('.new-entry-header');
+const $formActions = document?.querySelector('.form-actions');
 
 function handleInput(event: any): any {
   const eventTarget = event.target as HTMLInputElement;
@@ -184,5 +185,19 @@ function handlePenClick(event: Event): void {
     $image?.setAttribute('src', data.editing.photoUrl);
     if (!$editViewTitle) throw new Error('$editViewTitle does not exist');
     $editViewTitle.textContent = 'Edit Entry';
+    const deleteEntryButton = document.createElement('a');
+    deleteEntryButton.className = 'delete-button';
+    deleteEntryButton.textContent = 'Delete Entry';
+    $formActions?.prepend(deleteEntryButton);
+  }
+}
+
+$formAction?.addEventListener('click', handleDelete);
+
+function handleDelete(event):void{
+  const eventTarget = event.target as HTMLDivElement;
+  if (eventTarget.className === 'delete-button'){
+    $dialog?.showModal();
+    
   }
 }
