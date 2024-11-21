@@ -14,9 +14,7 @@ interface FormElements extends HTMLFormControlsCollection {
 const $image = document?.querySelector('#entry-image');
 const $imageUrl = document?.querySelector('#photo-url');
 const $entryForm = document?.querySelector('#entry-form') as HTMLFormElement;
-const $entryFormView = document?.querySelector('#entry-form-view');
 const $uList = document?.querySelector('ul');
-const $dataViewDiv = document?.querySelector('.dataviewentries');
 const $holdsNoEntries = document?.querySelector('.holds-no-entries');
 const $navBarButton = document?.querySelector('.navbarbtn');
 const $newEntryButton = document?.querySelector('.newentrybtn');
@@ -24,7 +22,7 @@ const $newEntries = document?.querySelector('.entries-styling');
 const $pen = document?.querySelector('.ul');
 const $editViewTitle = document?.querySelector('.new-entry-header');
 const $formActions = document?.querySelector('.form-actions');
-const $dialog = document?.querySelector('.dialog');
+const $dialog = document?.querySelector('.dialog') as HTMLDialogElement;
 const $deleteEntryBtn = document?.querySelector('.delete-entrybtn');
 const $cancelDelete = document?.querySelector('.cancel-delete');
 
@@ -156,6 +154,8 @@ function handleViewEntriesClick(): void {
 $navBarButton?.addEventListener('click', handleViewEntriesClick);
 
 function handleNewEntry(): void {
+  $image?.setAttribute('src', './images/placeholder-image-square.jpg');
+  $entryForm.reset();
   viewSwap('entry-form');
 }
 $newEntryButton?.addEventListener('click', handleNewEntry);
@@ -195,11 +195,11 @@ function handlePenClick(event: Event): void {
 }
 
 $formActions?.addEventListener('click', handleDelete);
+if (!$dialog) throw new Error('$dialog does not exist');
 
-function handleDelete(event): void {
-  const eventTarget = event.target;
-  if (eventTarget.className === 'delete-button') {
-    console.log('delete entry clicked');
+function handleDelete(event: Event): void {
+  const eventTarget = event.target as HTMLButtonElement;
+  if (eventTarget?.className === 'delete-button') {
     $dialog?.showModal();
   }
 }
@@ -207,7 +207,7 @@ $deleteEntryBtn?.addEventListener('click', confirmDelete);
 
 $cancelDelete?.addEventListener('click', closeModal);
 
-function closeModal(event): void {
+function closeModal(event: Event): void {
   const eventTarget = event.target as HTMLButtonElement;
   if (eventTarget.className === 'cancel-delete') {
     $dialog?.close();
@@ -218,9 +218,12 @@ function confirmDelete(event: Event): void {
   const eventTarget = event.target as HTMLButtonElement;
   if (eventTarget.className === 'delete-entrybtn') {
     const $formElements = $entryForm?.elements as FormElements;
+    const entryId = data?.editing?.entryId;
+    if (!entryId) throw new Error('entryId does not exist');
+
     const editEntry: Entry = {
-      entryId: data?.editing?.entryId,
-      title: $formElements.title.value,
+      entryId: Number(entryId),
+      title: $formElements?.title.value,
       photoUrl: $formElements.photoUrl.value,
       notes: $formElements.notes.value,
     };
@@ -231,7 +234,6 @@ function confirmDelete(event: Event): void {
         const $deleteElement = document.querySelector(
           `[data-entry-id="${entryIdNumber}"]`,
         );
-        console.log('$deleteElement', $deleteElement);
         $deleteElement?.remove();
         data.entries.splice(i, 1);
         $image?.setAttribute('src', './images/placeholder-image-square.jpg');

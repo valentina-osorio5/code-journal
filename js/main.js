@@ -1,10 +1,8 @@
-"use strict";
+'use strict';
 const $image = document?.querySelector('#entry-image');
 const $imageUrl = document?.querySelector('#photo-url');
 const $entryForm = document?.querySelector('#entry-form');
-const $entryFormView = document?.querySelector('#entry-form-view');
 const $uList = document?.querySelector('ul');
-const $dataViewDiv = document?.querySelector('.dataviewentries');
 const $holdsNoEntries = document?.querySelector('.holds-no-entries');
 const $navBarButton = document?.querySelector('.navbarbtn');
 const $newEntryButton = document?.querySelector('.newentrybtn');
@@ -16,190 +14,192 @@ const $dialog = document?.querySelector('.dialog');
 const $deleteEntryBtn = document?.querySelector('.delete-entrybtn');
 const $cancelDelete = document?.querySelector('.cancel-delete');
 function handleInput(event) {
-    const eventTarget = event.target;
-    const newSrc = eventTarget.value;
-    $image?.setAttribute('src', newSrc);
+  const eventTarget = event.target;
+  const newSrc = eventTarget.value;
+  $image?.setAttribute('src', newSrc);
 }
 $imageUrl?.addEventListener('input', handleInput);
 function handleSubmit(event) {
-    event.preventDefault();
-    if (data.editing === null) {
-        const $formElements = $entryForm?.elements;
-        const newEntry = {
-            entryId: data.nextEntryId,
-            title: $formElements.title.value,
-            photoUrl: $formElements.photoUrl.value,
-            notes: $formElements.notes.value,
-        };
-        data.entries.unshift(newEntry);
-        $uList?.prepend(renderEntry(newEntry));
-        data.nextEntryId++;
+  event.preventDefault();
+  if (data.editing === null) {
+    const $formElements = $entryForm?.elements;
+    const newEntry = {
+      entryId: data.nextEntryId,
+      title: $formElements.title.value,
+      photoUrl: $formElements.photoUrl.value,
+      notes: $formElements.notes.value,
+    };
+    data.entries.unshift(newEntry);
+    $uList?.prepend(renderEntry(newEntry));
+    data.nextEntryId++;
+    writeData();
+    $image?.setAttribute('src', './images/placeholder-image-square.jpg');
+    $entryForm.reset();
+    viewSwap('entries');
+    toggleNoEntries();
+  } else {
+    const $formElements = $entryForm?.elements;
+    const editEntry = {
+      entryId: data.editing.entryId,
+      title: $formElements.title.value,
+      photoUrl: $formElements.photoUrl.value,
+      notes: $formElements.notes.value,
+    };
+    for (let i = 0; i < data.entries.length; i++) {
+      const entryIdNumber = editEntry.entryId;
+      if (entryIdNumber === data.entries[i].entryId) {
+        const $replaceElement = document.querySelector(
+          `[data-entry-id="${entryIdNumber}"]`,
+        );
+        $replaceElement?.replaceWith(renderEntry(editEntry));
+        // const $newElement = editEntry;
+        data.entries[i] = editEntry;
         writeData();
-        $image?.setAttribute('src', './images/placeholder-image-square.jpg');
-        $entryForm.reset();
         viewSwap('entries');
-        toggleNoEntries();
+      }
     }
-    else {
-        const $formElements = $entryForm?.elements;
-        const editEntry = {
-            entryId: data.editing.entryId,
-            title: $formElements.title.value,
-            photoUrl: $formElements.photoUrl.value,
-            notes: $formElements.notes.value,
-        };
-        for (let i = 0; i < data.entries.length; i++) {
-            const entryIdNumber = editEntry.entryId;
-            if (entryIdNumber === data.entries[i].entryId) {
-                const $replaceElement = document.querySelector(`[data-entry-id="${entryIdNumber}"]`);
-                $replaceElement?.replaceWith(renderEntry(editEntry));
-                // const $newElement = editEntry;
-                data.entries[i] = editEntry;
-                writeData();
-                viewSwap('entries');
-            }
-        }
-        if (!$editViewTitle)
-            throw new Error('$editViewTitle does not exist');
-        $editViewTitle.textContent = 'New Entry';
-        data.editing = null;
-    }
+    if (!$editViewTitle) throw new Error('$editViewTitle does not exist');
+    $editViewTitle.textContent = 'New Entry';
+    data.editing = null;
+  }
 }
 $entryForm?.addEventListener('submit', handleSubmit);
 function renderEntry(entry) {
-    const listItem = document.createElement('li');
-    listItem.className = 'list-item';
-    const entryIdString = String(entry.entryId);
-    listItem.setAttribute('data-entry-id', entryIdString);
-    const img = document.createElement('img');
-    img.setAttribute('src', entry.photoUrl);
-    listItem.appendChild(img);
-    const title = document.createElement('h2');
-    title.textContent = entry.title;
-    listItem.appendChild(title);
-    const pen = document.createElement('i');
-    pen.className = 'fa-solid fa-pencil';
-    listItem.append(pen);
-    const description = document.createElement('p');
-    description.textContent = entry.notes;
-    listItem.appendChild(description);
-    return listItem;
+  const listItem = document.createElement('li');
+  listItem.className = 'list-item';
+  const entryIdString = String(entry.entryId);
+  listItem.setAttribute('data-entry-id', entryIdString);
+  const img = document.createElement('img');
+  img.setAttribute('src', entry.photoUrl);
+  listItem.appendChild(img);
+  const title = document.createElement('h2');
+  title.textContent = entry.title;
+  listItem.appendChild(title);
+  const pen = document.createElement('i');
+  pen.className = 'fa-solid fa-pencil';
+  listItem.append(pen);
+  const description = document.createElement('p');
+  description.textContent = entry.notes;
+  listItem.appendChild(description);
+  return listItem;
 }
 window.addEventListener('DOMContentLoaded', handleDCL);
 function handleDCL() {
-    toggleNoEntries();
-    for (let i = 0; i < data.entries.length; i++) {
-        const listItem = renderEntry(data.entries[i]);
-        $uList?.appendChild(listItem);
-        viewSwap(currentView);
-    }
+  toggleNoEntries();
+  for (let i = 0; i < data.entries.length; i++) {
+    const listItem = renderEntry(data.entries[i]);
+    $uList?.appendChild(listItem);
+    viewSwap(currentView);
+  }
 }
 const currentView = data.view;
 function viewSwap(viewName) {
-    const entriesView = document.getElementById('entries');
-    const entryFormView = document.getElementById('entry-form-view');
-    //   // Hide or show the appropriate view based on viewName
-    if (viewName === 'entries') {
-        entriesView?.classList.remove('hidden');
-        $newEntries?.classList.remove('hidden');
-        entryFormView?.classList.add('hidden');
-    }
-    else if (viewName === 'entry-form') {
-        entryFormView?.classList.remove('hidden');
-        entriesView?.classList.add('hidden');
-        $newEntries?.classList.add('hidden');
-    }
-    // Update the view in the data model
-    data.view = viewName;
-    toggleNoEntries();
+  const entriesView = document.getElementById('entries');
+  const entryFormView = document.getElementById('entry-form-view');
+  //   // Hide or show the appropriate view based on viewName
+  if (viewName === 'entries') {
+    entriesView?.classList.remove('hidden');
+    $newEntries?.classList.remove('hidden');
+    entryFormView?.classList.add('hidden');
+  } else if (viewName === 'entry-form') {
+    entryFormView?.classList.remove('hidden');
+    entriesView?.classList.add('hidden');
+    $newEntries?.classList.add('hidden');
+  }
+  // Update the view in the data model
+  data.view = viewName;
+  toggleNoEntries();
 }
 function toggleNoEntries() {
-    if (data.entries.length === 0) {
-        $holdsNoEntries?.classList.remove('hidden');
-    }
-    else {
-        $holdsNoEntries?.classList.add('hidden');
-    }
+  if (data.entries.length === 0) {
+    $holdsNoEntries?.classList.remove('hidden');
+  } else {
+    $holdsNoEntries?.classList.add('hidden');
+  }
 }
 function handleViewEntriesClick() {
-    viewSwap('entries');
+  viewSwap('entries');
 }
 $navBarButton?.addEventListener('click', handleViewEntriesClick);
 function handleNewEntry() {
-    viewSwap('entry-form');
+  $image?.setAttribute('src', './images/placeholder-image-square.jpg');
+  $entryForm.reset();
+  viewSwap('entry-form');
 }
 $newEntryButton?.addEventListener('click', handleNewEntry);
 $pen?.addEventListener('click', handlePenClick);
 function handlePenClick(event) {
-    const eventTarget = event.target;
-    if (eventTarget?.className === 'fa-solid fa-pencil') {
-        viewSwap('entry-form');
-        const $closestElement = eventTarget.closest('[data-entry-id]');
-        const entryId = $closestElement.dataset.entryId;
-        const entryIdNumber = Number(entryId);
-        let entryEdit = null;
-        for (let i = 0; i < data.entries.length; i++) {
-            if (data.entries[i].entryId === entryIdNumber) {
-                entryEdit = data.entries[i];
-            }
-        }
-        data.editing = entryEdit;
+  const eventTarget = event.target;
+  if (eventTarget?.className === 'fa-solid fa-pencil') {
+    viewSwap('entry-form');
+    const $closestElement = eventTarget.closest('[data-entry-id]');
+    const entryId = $closestElement.dataset.entryId;
+    const entryIdNumber = Number(entryId);
+    let entryEdit = null;
+    for (let i = 0; i < data.entries.length; i++) {
+      if (data.entries[i].entryId === entryIdNumber) {
+        entryEdit = data.entries[i];
+      }
     }
-    if (data.editing) {
-        const $formElements = $entryForm.elements;
-        $formElements.title.value = data.editing.title;
-        $formElements.photoUrl.value = data.editing.photoUrl;
-        $formElements.notes.value = data.editing.notes;
-        $image?.setAttribute('src', data.editing.photoUrl);
-        if (!$editViewTitle)
-            throw new Error('$editViewTitle does not exist');
-        $editViewTitle.textContent = 'Edit Entry';
-        const deleteEntryButton = document.createElement('a');
-        deleteEntryButton.className = 'delete-button';
-        deleteEntryButton.textContent = 'Delete Entry';
-        $formActions?.prepend(deleteEntryButton);
-    }
+    data.editing = entryEdit;
+  }
+  if (data.editing) {
+    const $formElements = $entryForm.elements;
+    $formElements.title.value = data.editing.title;
+    $formElements.photoUrl.value = data.editing.photoUrl;
+    $formElements.notes.value = data.editing.notes;
+    $image?.setAttribute('src', data.editing.photoUrl);
+    if (!$editViewTitle) throw new Error('$editViewTitle does not exist');
+    $editViewTitle.textContent = 'Edit Entry';
+    const deleteEntryButton = document.createElement('a');
+    deleteEntryButton.className = 'delete-button';
+    deleteEntryButton.textContent = 'Delete Entry';
+    $formActions?.prepend(deleteEntryButton);
+  }
 }
 $formActions?.addEventListener('click', handleDelete);
+if (!$dialog) throw new Error('$dialog does not exist');
 function handleDelete(event) {
-    const eventTarget = event.target;
-    if (eventTarget.className === 'delete-button') {
-        console.log('delete entry clicked');
-        $dialog?.showModal();
-    }
+  const eventTarget = event.target;
+  if (eventTarget?.className === 'delete-button') {
+    $dialog?.showModal();
+  }
 }
 $deleteEntryBtn?.addEventListener('click', confirmDelete);
 $cancelDelete?.addEventListener('click', closeModal);
 function closeModal(event) {
-    const eventTarget = event.target;
-    if (eventTarget.className === 'cancel-delete') {
-        $dialog?.close();
-    }
+  const eventTarget = event.target;
+  if (eventTarget.className === 'cancel-delete') {
+    $dialog?.close();
+  }
 }
 function confirmDelete(event) {
-    const eventTarget = event.target;
-    if (eventTarget.className === 'delete-entrybtn') {
-        const $formElements = $entryForm?.elements;
-        const editEntry = {
-            entryId: data?.editing?.entryId,
-            title: $formElements.title.value,
-            photoUrl: $formElements.photoUrl.value,
-            notes: $formElements.notes.value,
-        };
-        for (let i = 0; i < data.entries.length; i++) {
-            const entryIdNumber = editEntry.entryId;
-            if (entryIdNumber === data.entries[i].entryId) {
-                const $deleteElement = document.querySelector(`[data-entry-id="${entryIdNumber}"]`);
-                console.log('$deleteElement', $deleteElement);
-                $deleteElement?.remove();
-                data.entries.splice(i, 1);
-                $image?.setAttribute('src', './images/placeholder-image-square.jpg');
-                $entryForm.reset();
-                writeData();
-            }
-        }
-        toggleNoEntries();
-        viewSwap('entries');
-        $dialog?.close();
+  const eventTarget = event.target;
+  if (eventTarget.className === 'delete-entrybtn') {
+    const $formElements = $entryForm?.elements;
+    const entryId = data?.editing?.entryId;
+    if (!entryId) throw new Error('entryId does not exist');
+    const editEntry = {
+      entryId: Number(entryId),
+      title: $formElements?.title.value,
+      photoUrl: $formElements.photoUrl.value,
+      notes: $formElements.notes.value,
+    };
+    for (let i = 0; i < data.entries.length; i++) {
+      const entryIdNumber = editEntry.entryId;
+      if (entryIdNumber === data.entries[i].entryId) {
+        const $deleteElement = document.querySelector(
+          `[data-entry-id="${entryIdNumber}"]`,
+        );
+        $deleteElement?.remove();
+        data.entries.splice(i, 1);
+        $image?.setAttribute('src', './images/placeholder-image-square.jpg');
+        $entryForm.reset();
+        writeData();
+      }
     }
+    toggleNoEntries();
+    viewSwap('entries');
+    $dialog?.close();
+  }
 }
