@@ -6,6 +6,34 @@
   padding-right: 650px;
 }
 
+.cancel-delete {
+  background-color: #b6b6b6;
+  color: black;
+}
+
+.delete-entrybtn {
+  background-color: red;
+  color: white;
+  border: none;
+  float: right;
+}
+
+.modal-actions {
+  /* display: flex; */
+}
+
+.modal-text {
+  width: 100%;
+}
+
+.dialog {
+  width: 500px;
+  border: 0.5 px gray;
+
+  /* display: flex; */
+  border-radius: 10px;
+}
+
 img {
   width: 100%;
   height: auto;

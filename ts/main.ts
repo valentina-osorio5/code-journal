@@ -24,6 +24,9 @@ const $newEntries = document?.querySelector('.entries-styling');
 const $pen = document?.querySelector('.ul');
 const $editViewTitle = document?.querySelector('.new-entry-header');
 const $formActions = document?.querySelector('.form-actions');
+const $dialog = document?.querySelector('.dialog');
+const $deleteEntryBtn = document?.querySelector('.delete-entrybtn');
+const $cancelDelete = document?.querySelector('.cancel-delete');
 
 function handleInput(event: any): any {
   const eventTarget = event.target as HTMLInputElement;
@@ -62,7 +65,6 @@ function handleSubmit(event: any): void {
     for (let i = 0; i < data.entries.length; i++) {
       const entryIdNumber = editEntry.entryId;
       if (entryIdNumber === data.entries[i].entryId) {
-        // const deleteEntry = data.entries[i];
         const $replaceElement = document.querySelector(
           `[data-entry-id="${entryIdNumber}"]`,
         );
@@ -192,12 +194,53 @@ function handlePenClick(event: Event): void {
   }
 }
 
-$formAction?.addEventListener('click', handleDelete);
+$formActions?.addEventListener('click', handleDelete);
 
-function handleDelete(event):void{
-  const eventTarget = event.target as HTMLDivElement;
-  if (eventTarget.className === 'delete-button'){
+function handleDelete(event): void {
+  const eventTarget = event.target;
+  if (eventTarget.className === 'delete-button') {
+    console.log('delete entry clicked');
     $dialog?.showModal();
-    
+  }
+}
+$deleteEntryBtn?.addEventListener('click', confirmDelete);
+
+$cancelDelete?.addEventListener('click', closeModal);
+
+function closeModal(event): void {
+  const eventTarget = event.target as HTMLButtonElement;
+  if (eventTarget.className === 'cancel-delete') {
+    $dialog?.close();
+  }
+}
+
+function confirmDelete(event: Event): void {
+  const eventTarget = event.target as HTMLButtonElement;
+  if (eventTarget.className === 'delete-entrybtn') {
+    const $formElements = $entryForm?.elements as FormElements;
+    const editEntry: Entry = {
+      entryId: data?.editing?.entryId,
+      title: $formElements.title.value,
+      photoUrl: $formElements.photoUrl.value,
+      notes: $formElements.notes.value,
+    };
+
+    for (let i = 0; i < data.entries.length; i++) {
+      const entryIdNumber = editEntry.entryId;
+      if (entryIdNumber === data.entries[i].entryId) {
+        const $deleteElement = document.querySelector(
+          `[data-entry-id="${entryIdNumber}"]`,
+        );
+        console.log('$deleteElement', $deleteElement);
+        $deleteElement?.remove();
+        data.entries.splice(i, 1);
+        $image?.setAttribute('src', './images/placeholder-image-square.jpg');
+        $entryForm.reset();
+        writeData();
+      }
+    }
+    toggleNoEntries();
+    viewSwap('entries');
+    $dialog?.close();
   }
 }
