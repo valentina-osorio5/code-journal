@@ -1,3 +1,39 @@
+.delete-button {
+  font-size: 20px;
+  text-decoration: underline;
+  color: red;
+  padding-top: 10px;
+  padding-right: 650px;
+}
+
+.cancel-delete {
+  background-color: #b6b6b6;
+  color: black;
+}
+
+.delete-entrybtn {
+  background-color: red;
+  color: white;
+  border: none;
+  float: right;
+}
+
+.modal-actions {
+  /* display: flex; */
+}
+
+.modal-text {
+  width: 100%;
+}
+
+.dialog {
+  width: 500px;
+  border: 0.5 px gray;
+
+  /* display: flex; */
+  border-radius: 10px;
+}
+
 img {
   width: 100%;
   height: auto;
@@ -12,6 +48,25 @@ header {
 .new-entry-header {
   padding: 1.5rem;
   font-family: 'Proza Libre', sans-serif;
+}
+
+.fa-solid.fa-pencil {
+  color: #562b81;
+}
+
+.list-item h2 {
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+}
+
+.fa-solid.fa-pencil {
+  color: #562b81;
+  font-size: 25px;
+  vertical-align: middle;
+  align-items: right;
+  justify-content: right;
+  padding-right: 50px;
 }
 
 .newentrybtn {

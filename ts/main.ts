@@ -14,15 +14,19 @@ interface FormElements extends HTMLFormControlsCollection {
 const $image = document?.querySelector('#entry-image');
 const $imageUrl = document?.querySelector('#photo-url');
 const $entryForm = document?.querySelector('#entry-form') as HTMLFormElement;
-const $entryFormView = document?.querySelector('#entry-form-view');
 const $uList = document?.querySelector('ul');
-const $dataViewDiv = document?.querySelector('.dataviewentries');
 const $holdsNoEntries = document?.querySelector('.holds-no-entries');
 const $navBarButton = document?.querySelector('.navbarbtn');
 const $newEntryButton = document?.querySelector('.newentrybtn');
 const $newEntries = document?.querySelector('.entries-styling');
+const $pen = document?.querySelector('.ul');
+const $editViewTitle = document?.querySelector('.new-entry-header');
+const $formActions = document?.querySelector('.form-actions');
+const $dialog = document?.querySelector('.dialog') as HTMLDialogElement;
+const $deleteEntryBtn = document?.querySelector('.delete-entrybtn');
+const $cancelDelete = document?.querySelector('.cancel-delete');
 
-function handleInput(event: any): void {
+function handleInput(event: any): any {
   const eventTarget = event.target as HTMLInputElement;
   const newSrc = eventTarget.value;
   $image?.setAttribute('src', newSrc);
@@ -31,28 +35,59 @@ $imageUrl?.addEventListener('input', handleInput);
 
 function handleSubmit(event: any): void {
   event.preventDefault();
-  const $formElements = $entryForm?.elements as FormElements;
-  const newEntry: Entry = {
-    entryId: data.nextEntryId,
-    title: $formElements.title.value,
-    photoUrl: $formElements.photoUrl.value,
-    notes: $formElements.notes.value,
-  };
-  data.entries.unshift(newEntry);
-  $uList?.prepend(renderEntry(newEntry));
-  data.nextEntryId++;
-  writeData();
-  $image?.setAttribute('src', 'images/placeholder-image-square.jpg');
-  $entryForm.reset();
-  viewSwap('entries');
-  toggleNoEntries();
+  if (data.editing === null) {
+    const $formElements = $entryForm?.elements as FormElements;
+    const newEntry: Entry = {
+      entryId: data.nextEntryId,
+      title: $formElements.title.value,
+      photoUrl: $formElements.photoUrl.value,
+      notes: $formElements.notes.value,
+    };
+    data.entries.unshift(newEntry);
+    $uList?.prepend(renderEntry(newEntry));
+    data.nextEntryId++;
+    writeData();
+    $image?.setAttribute('src', './images/placeholder-image-square.jpg');
+    $entryForm.reset();
+    viewSwap('entries');
+    toggleNoEntries();
+  } else {
+    const $formElements = $entryForm?.elements as FormElements;
+    const editEntry: Entry = {
+      entryId: data.editing.entryId,
+      title: $formElements.title.value,
+      photoUrl: $formElements.photoUrl.value,
+      notes: $formElements.notes.value,
+    };
+
+    for (let i = 0; i < data.entries.length; i++) {
+      const entryIdNumber = editEntry.entryId;
+      if (entryIdNumber === data.entries[i].entryId) {
+        const $replaceElement = document.querySelector(
+          `[data-entry-id="${entryIdNumber}"]`,
+        );
+
+        $replaceElement?.replaceWith(renderEntry(editEntry));
+        // const $newElement = editEntry;
+        data.entries[i] = editEntry;
+        writeData();
+        viewSwap('entries');
+      }
+    }
+
+    if (!$editViewTitle) throw new Error('$editViewTitle does not exist');
+    $editViewTitle!.textContent = 'New Entry';
+    data.editing = null;
+  }
 }
 
 $entryForm?.addEventListener('submit', handleSubmit);
 
-function renderEntry(entry: Entry): any {
+function renderEntry(entry: Entry): HTMLLIElement {
   const listItem = document.createElement('li');
   listItem.className = 'list-item';
+  const entryIdString = String(entry.entryId);
+  listItem.setAttribute('data-entry-id', entryIdString);
 
   const img = document.createElement('img');
   img.setAttribute('src', entry.photoUrl);
@@ -61,6 +96,10 @@ function renderEntry(entry: Entry): any {
   const title = document.createElement('h2');
   title.textContent = entry.title;
   listItem.appendChild(title);
+
+  const pen = document.createElement('i');
+  pen.className = 'fa-solid fa-pencil';
+  listItem.append(pen);
 
   const description = document.createElement('p');
   description.textContent = entry.notes;
@@ -115,6 +154,95 @@ function handleViewEntriesClick(): void {
 $navBarButton?.addEventListener('click', handleViewEntriesClick);
 
 function handleNewEntry(): void {
+  $image?.setAttribute('src', './images/placeholder-image-square.jpg');
+  $entryForm.reset();
   viewSwap('entry-form');
 }
 $newEntryButton?.addEventListener('click', handleNewEntry);
+
+$pen?.addEventListener('click', handlePenClick);
+
+function handlePenClick(event: Event): void {
+  const eventTarget = event.target as HTMLUListElement;
+  if (eventTarget?.className === 'fa-solid fa-pencil') {
+    viewSwap('entry-form');
+    const $closestElement = eventTarget.closest(
+      '[data-entry-id]',
+    ) as HTMLElement;
+    const entryId = $closestElement!.dataset.entryId;
+    const entryIdNumber = Number(entryId);
+    let entryEdit = null;
+    for (let i = 0; i < data.entries.length; i++) {
+      if (data.entries[i].entryId === entryIdNumber) {
+        entryEdit = data.entries[i];
+      }
+    }
+    data.editing = entryEdit;
+  }
+  if (data.editing) {
+    const $formElements = $entryForm.elements as FormElements;
+    $formElements.title.value = data.editing.title;
+    $formElements.photoUrl.value = data.editing.photoUrl;
+    $formElements.notes.value = data.editing.notes;
+    $image?.setAttribute('src', data.editing.photoUrl);
+    if (!$editViewTitle) throw new Error('$editViewTitle does not exist');
+    $editViewTitle.textContent = 'Edit Entry';
+    const deleteEntryButton = document.createElement('a');
+    deleteEntryButton.className = 'delete-button';
+    deleteEntryButton.textContent = 'Delete Entry';
+    $formActions?.prepend(deleteEntryButton);
+  }
+}
+
+$formActions?.addEventListener('click', handleDelete);
+if (!$dialog) throw new Error('$dialog does not exist');
+
+function handleDelete(event: Event): void {
+  const eventTarget = event.target as HTMLButtonElement;
+  if (eventTarget?.className === 'delete-button') {
+    $dialog?.showModal();
+  }
+}
+$deleteEntryBtn?.addEventListener('click', confirmDelete);
+
+$cancelDelete?.addEventListener('click', closeModal);
+
+function closeModal(event: Event): void {
+  const eventTarget = event.target as HTMLButtonElement;
+  if (eventTarget.className === 'cancel-delete') {
+    $dialog?.close();
+  }
+}
+
+function confirmDelete(event: Event): void {
+  const eventTarget = event.target as HTMLButtonElement;
+  if (eventTarget.className === 'delete-entrybtn') {
+    const $formElements = $entryForm?.elements as FormElements;
+    const entryId = data?.editing?.entryId;
+    if (!entryId) throw new Error('entryId does not exist');
+
+    const editEntry: Entry = {
+      entryId: Number(entryId),
+      title: $formElements?.title.value,
+      photoUrl: $formElements.photoUrl.value,
+      notes: $formElements.notes.value,
+    };
+
+    for (let i = 0; i < data.entries.length; i++) {
+      const entryIdNumber = editEntry.entryId;
+      if (entryIdNumber === data.entries[i].entryId) {
+        const $deleteElement = document.querySelector(
+          `[data-entry-id="${entryIdNumber}"]`,
+        );
+        $deleteElement?.remove();
+        data.entries.splice(i, 1);
+        $image?.setAttribute('src', './images/placeholder-image-square.jpg');
+        $entryForm.reset();
+        writeData();
+      }
+    }
+    toggleNoEntries();
+    viewSwap('entries');
+    $dialog?.close();
+  }
+}
